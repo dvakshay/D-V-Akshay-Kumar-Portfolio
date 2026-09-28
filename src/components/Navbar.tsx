@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sparkles, Mail } from 'lucide-react';
+import { Menu, X, Sparkles, Mail, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GithubIcon } from './Icons';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onOpenResume?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -45,7 +49,7 @@ export const Navbar: React.FC = () => {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-3 sm:py-4 px-4 sm:px-8 flex justify-center ${
-          scrolled ? 'backdrop-blur-md bg-dark-950/70 border-b border-white/[0.06] shadow-lg' : 'bg-transparent'
+          scrolled ? 'backdrop-blur-md bg-dark-950/75 border-b border-white/[0.08] shadow-lg' : 'bg-transparent'
         }`}
       >
         <div className="w-full max-w-7xl flex items-center justify-between">
@@ -64,7 +68,7 @@ export const Navbar: React.FC = () => {
             </div>
 
             <div className="hidden sm:block text-left">
-              <div className="text-xs font-bold text-white tracking-wider flex items-center gap-1.5">
+              <div className="text-xs font-bold text-white tracking-wider flex items-center gap-1.5 font-sans">
                 <span>AKSHAY KUMAR</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
@@ -101,7 +105,20 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
+            {/* Quick Resume Button */}
+            {onOpenResume && (
+              <button
+                type="button"
+                onClick={onOpenResume}
+                data-cursor="RESUME"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-dark-850 hover:bg-dark-800 border border-white/[0.1] hover:border-cyan-400 text-xs font-mono text-slate-200 hover:text-white transition-all shadow-sm"
+              >
+                <FileText className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Resume</span>
+              </button>
+            )}
+
             <a
               href="https://github.com/dvakshay"
               target="_blank"
@@ -151,12 +168,29 @@ export const Navbar: React.FC = () => {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-lg bg-dark-900/60 border border-white/[0.04] text-sm font-medium text-slate-200 hover:bg-indigo-950 hover:text-cyan-300 transition-all text-left flex items-center justify-between"
+                  className="px-4 py-2.5 rounded-lg bg-dark-900/60 border border-white/[0.04] text-sm font-medium text-slate-200 hover:bg-indigo-950 hover:text-cyan-300 transition-all text-left flex items-center justify-between font-sans"
                 >
                   <span>{item.label}</span>
                   <span className="text-xs font-mono text-slate-500">→</span>
                 </a>
               ))}
+
+              {onOpenResume && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenResume();
+                  }}
+                  className="px-4 py-2.5 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-sm font-medium text-cyan-300 hover:bg-indigo-950 transition-all text-left flex items-center justify-between font-sans"
+                >
+                  <span className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-cyan-400" />
+                    <span>View Resume / CV Snapshot</span>
+                  </span>
+                  <span className="text-xs font-mono text-slate-400">PDF</span>
+                </button>
+              )}
             </div>
 
             <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-slate-400 px-1">

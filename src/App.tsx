@@ -15,10 +15,12 @@ import { EducationSection } from './sections/EducationSection';
 import { GithubSection } from './sections/GithubSection';
 import { ContactSection } from './sections/ContactSection';
 import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal';
+import { ResumeSnapshotModal } from './components/ResumeSnapshotModal';
 import type { ProjectItem } from './types';
 
 export const App: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   const handleExploreClick = () => {
     const el = document.getElementById('projects');
@@ -34,11 +36,14 @@ export const App: React.FC = () => {
       <InteractiveCanvasBackground />
 
       {/* Floating Navbar */}
-      <Navbar />
+      <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 
       {/* Main Content Sections */}
       <main className="relative z-10">
-        <HeroSection onExploreClick={handleExploreClick} />
+        <HeroSection
+          onExploreClick={handleExploreClick}
+          onOpenResume={() => setIsResumeOpen(true)}
+        />
         <AboutSection />
         <SkillsSection />
         <JourneySection />
@@ -58,6 +63,12 @@ export const App: React.FC = () => {
       <ProjectCaseStudyModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+      />
+
+      {/* Quick Resume Snapshot Modal */}
+      <ResumeSnapshotModal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
       />
     </div>
   );
